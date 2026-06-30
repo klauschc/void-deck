@@ -1,11 +1,12 @@
 from __future__ import annotations
+import os
 
 import json
 from contextlib import asynccontextmanager
 
 import aiosqlite
 
-DB_PATH = "/workspace/void-deck/backend/tarot.db"
+DB_PATH = os.path.join(os.path.dirname(__file__), "tarot.db")
 
 
 async def create_tables() -> None:
