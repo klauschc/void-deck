@@ -11,6 +11,29 @@ enum TarotTheme {
     static let userBubbleStart = Color(red: 107/255, green: 63/255, blue: 160/255)
     static let userBubbleEnd = Color(red: 61/255, green: 31/255, blue: 110/255)
     static let assistantBubble = Color.white.opacity(0.10)
-    static var cosmicBg: some View { LinearGradient(colors: [bgStart, bgEnd], startPoint: .top, endPoint: .bottom).ignoresSafeArea() }
-    static var primaryGradient: LinearGradient { LinearGradient(colors: [primaryStart, primaryEnd], startPoint: .leading, endPoint: .trailing) }
+
+    static var cosmicBg: some View {
+        LinearGradient(colors: [bgStart, bgEnd], startPoint: .top, endPoint: .bottom).ignoresSafeArea()
+    }
+    static var primaryGradient: LinearGradient {
+        LinearGradient(colors: [primaryStart, primaryEnd], startPoint: .leading, endPoint: .trailing)
+    }
+}
+
+enum GlassEffectStyle {
+    case regular, prominent
+    func interactive() -> GlassEffectStyle { self }
+}
+
+struct GlassEffectModifier: ViewModifier {
+    let style: GlassEffectStyle
+    func body(content: Content) -> some View {
+        content.background(.ultraThinMaterial)
+    }
+}
+
+extension View {
+    func glassEffect(_ style: GlassEffectStyle = .regular) -> some View {
+        modifier(GlassEffectModifier(style: style))
+    }
 }
