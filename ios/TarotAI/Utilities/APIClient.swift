@@ -14,25 +14,23 @@ actor APIClient {
         self.session = URLSession(configuration: config)
     }
 
-    func reconfigure() {
-        self.baseURL = UserDefaults.standard.string(forKey: "api_base_url") ?? "http://localhost:8000"
-    }
+    func reconfigure() { self.baseURL = UserDefaults.standard.string(forKey: "api_base_url") ?? "http://localhost:8000" }
 
-    private var userApiKey: String {
-        UserDefaults.standard.string(forKey: "api_key") ?? ""
-    }
+    private var userApiKey: String? { UserDefaults.standard.string(forKey: "api_key") }
 
     func fetchCards() async throws -> [TarotCard] { try decoder.decode([TarotCard].self, from: try await get("/api/cards")) }
     func fetchSpreads() async throws -> [Spread] { try decoder.decode([Spread].self, from: try await get("/api/spreads")) }
 
     func createReading(question: String, spreadId: String, cards: [SelectedCard]) async throws -> Reading {
         var body = ReadingRequest(question: question, spreadId: spreadId, cards: cards)
-        body.apiKey = userApiKey
+        if let key = userApiKey, !key.isEmpty { body.apiKey = key }
         return try decoder.decode(Reading.self, from: try await post("/api/readings", body: body))
     }
 
     func sendFollowUp(readingId: String, message: String) async throws -> FollowUpResponse {
-        try decoder.decode(FollowUpResponse.self, from: try await post("/api/readings/\(readingId)/follow-up", body: FollowUpBody(message: message, apiKey: userApiKey)))
+        var b = FollowUpBody(message: message)
+        if let key = userApiKey, !key.isEmpty { b.apiKey = key }
+        return try decoder.decode(FollowUpResponse.self, from: try await post("/api/readings/\(readingId)/follow-up", body: b))
     }
 
     func fetchReadings() async throws -> [Reading] { try decoder.decode([Reading].self, from: try await get("/api/readings")) }
@@ -55,6 +53,6 @@ actor APIClient {
 }
 
 enum APIError: Error { case invalidURL, badResponse }
-struct ReadingRequest: Codable { let question: String; let spreadId: String; let cards: [SelectedCard]; var apiKey: String? = nil }
-struct FollowUpBody: Codable { let message: String; var apiKey: String? = nil }
+struct ReadingRequest: Codable { let question: String; let spreadId: String; let cards: [SelectedCard]; var apiKey: *** = nil }
+struct FollowUpBody: Codable { let message: String; var apiKey: *** = nil }
 struct FollowUpResponse: Codable { let readingId: String; let message: String; let response: String? }
