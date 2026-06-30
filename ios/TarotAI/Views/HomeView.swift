@@ -3,7 +3,7 @@ import SwiftUI
 struct HomeView: View {
     @Environment(HomeViewModel.self) private var viewModel
     @Binding var selectedTab: Int
-    
+
     var body: some View {
         ZStack {
             TarotTheme.cosmicBg

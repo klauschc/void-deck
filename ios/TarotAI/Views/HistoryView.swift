@@ -2,7 +2,7 @@ import SwiftUI
 
 struct HistoryView: View {
     @State private var viewModel = HistoryViewModel()
-    
+
     var body: some View {
         ZStack {
             TarotTheme.cosmicBg
