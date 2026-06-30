@@ -1,0 +1,27 @@
+name: Void Deck
+options:
+  bundleIdPrefix: com.klauschc
+  deploymentTarget:
+    iOS: "26.0"
+  xcodeVersion: "16.0"
+settings:
+  base:
+    CODE_SIGN_IDENTITY: ""
+    CODE_SIGNING_REQUIRED: "NO"
+    CODE_SIGNING_ALLOWED: "NO"
+    TARGETED_DEVICE_FAMILY: "1"
+    DEVELOPMENT_TEAM: ""
+    SWIFT_VERSION: "6.0"
+targets:
+  TarotAI:
+    type: application
+    platform: iOS
+    sources:
+      - path: TarotAI
+        type: group
+    settings:
+      base:
+        INFOPLIST_FILE: TarotAI/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.klauschc.void-deck
+        PRODUCT_NAME: TarotAI
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: "NO"
