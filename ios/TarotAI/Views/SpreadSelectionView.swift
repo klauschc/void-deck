@@ -11,7 +11,7 @@ struct SpreadSelectionView: View {
                     Text("選擇牌陣").font(.title2.weight(.semibold)).foregroundStyle(.white)
                     ForEach(viewModel.spreads) { spread in
                         NavigationLink(value: "question") {
-                            GlassCard(content: VStack(alignment: .leading, spacing: 8) {
+                            GlassCard(VStack(alignment: .leading, spacing: 8) {
                                 Text(spread.nameZh).font(.headline).foregroundStyle(.white)
                                 Text("\(spread.cardCount) 張牌").font(.caption).foregroundStyle(TarotTheme.accent)
                             })

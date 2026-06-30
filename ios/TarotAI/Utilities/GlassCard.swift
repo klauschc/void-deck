@@ -8,3 +8,7 @@ struct GlassCard<Content: View>: View {
             .background { RoundedRectangle(cornerRadius: 20, style: .continuous).fill(.clear).glassEffect(.regular.interactive()) }
     }
 }
+
+extension GlassCard {
+    init(_ content: Content) { self.content = content }
+}
