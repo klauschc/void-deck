@@ -53,6 +53,6 @@ actor APIClient {
 }
 
 enum APIError: Error { case invalidURL, badResponse }
-struct ReadingRequest: Codable { let question: String; let spreadId: String; let cards: [SelectedCard]; var apiKey: *** = nil }
-struct FollowUpBody: Codable { let message: String; var apiKey: *** = nil }
+struct ReadingRequest: Codable { let question: String; let spreadId: String; let cards: [SelectedCard]; var apiKey: String? = nil }
+struct FollowUpBody: Codable { let message: String; var apiKey: String? = nil }
 struct FollowUpResponse: Codable { let readingId: String; let message: String; let response: String? }
