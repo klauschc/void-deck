@@ -34,11 +34,11 @@ struct CardSelectionView: View {
                 bottomPanel
             }
         }
-        .onChange(of: showOrientation) { _, newValue in
-            if !newValue { viewModel.cancelOrientation() }
+        .onChange(of: viewModel.cardToOrient) { _, newCard in
+            if newCard != nil { showOrientation = true }
         }
-        .onChange(of: viewModel.cardToOrient ?? "") { _, _ in
-            if viewModel.cardToOrient != nil { showOrientation = true }
+        .onChange(of: showOrientation) { _, showing in
+            if !showing { viewModel.cancelOrientation() }
         }
         .sheet(isPresented: $showOrientation) {
             CardOrientationPicker(orientation: $tempOrientation)

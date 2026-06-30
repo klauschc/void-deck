@@ -1,6 +1,6 @@
 import Foundation
 
-struct TarotCard: Codable, Identifiable {
+struct TarotCard: Codable, Identifiable, Equatable {
     let id: String
     let nameEn: String
     let nameZh: String
@@ -18,4 +18,6 @@ struct TarotCard: Codable, Identifiable {
     let keywordsUpright: String?
     let keywordsReversed: String?
     let description: String?
+
+    static func == (lhs: TarotCard, rhs: TarotCard) -> Bool { lhs.id == rhs.id }
 }
