@@ -1,4 +1,3 @@
-"""Pydantic models for Tarot AI API."""
 from __future__ import annotations
 
 from typing import Literal
@@ -59,4 +58,3 @@ class MessageCreate(BaseModel):
 
 class FollowUpRequest(BaseModel):
     message: str
-    api_key: str | None = None
