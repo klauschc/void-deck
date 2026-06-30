@@ -1,7 +1,4 @@
 import Foundation
 
-struct SelectedCard: Codable {
-    let positionIndex: Int
-    let cardId: String
-    let orientation: String
-}
+// SelectedCard is now nested inside Reading in Reading.swift
+// This file is intentionally empty to avoid duplicate symbol conflicts.
