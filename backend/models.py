@@ -49,6 +49,7 @@ class ReadingCreate(BaseModel):
     question: str
     spread_id: str
     cards: list[dict]
+    api_key: str | None = None
 
 
 class MessageCreate(BaseModel):
@@ -58,3 +59,4 @@ class MessageCreate(BaseModel):
 
 class FollowUpRequest(BaseModel):
     message: str
+    api_key: str | None = None
