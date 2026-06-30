@@ -26,7 +26,7 @@ struct SettingsView: View {
                     APIClient.shared.reconfigure()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) { showSaved = false }
                 } label: {
-                    Text(showSaved ? "已儲存！" : "儲存設定").font(.headline).foregroundColor(.white).frame(maxWidth: .infinity).padding(.vertical, 14).background(showSaved ? Color.green : TarotTheme.primaryGradient).clipShape(Capsule())
+                    Text(showSaved ? "已儲存！" : "儲存設定").font(.headline).foregroundColor(.white).frame(maxWidth: .infinity).padding(.vertical, 14).background(showSaved ? AnyShapeStyle(Color.green) : AnyShapeStyle(TarotTheme.primaryGradient)).clipShape(Capsule())
                 }.disabled(viewModel.baseURL.isEmpty)
                 Spacer()
             }.padding()
