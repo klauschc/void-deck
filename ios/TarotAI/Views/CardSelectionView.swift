@@ -4,7 +4,6 @@ struct CardSelectionView: View {
     @Environment(HomeViewModel.self) private var homeViewModel
     @State private var viewModel = CardSelectionViewModel()
     @State private var showOrientation = false
-    @State private var pendingCard: TarotCard? = nil
     @State private var tempOrientation = "upright"
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 10), count: 3)
 
@@ -35,16 +34,21 @@ struct CardSelectionView: View {
                 bottomPanel
             }
         }
+        .onChange(of: showOrientation) { _, newValue in
+            if !newValue { viewModel.cancelOrientation() }
+        }
+        .onChange(of: viewModel.cardToOrient ?? "") { _, _ in
+            if viewModel.cardToOrient != nil { showOrientation = true }
+        }
         .sheet(isPresented: $showOrientation) {
             CardOrientationPicker(orientation: $tempOrientation)
                 .presentationDetents([.height(240)])
                 .onDisappear {
-                    viewModel.setOrientation(tempOrientation)
+                    if viewModel.cardToOrient != nil {
+                        viewModel.setOrientation(tempOrientation)
+                    }
                     tempOrientation = "upright"
                 }
-        }
-        .onChange(of: viewModel.cardToOrient) { _, newCard in
-            if newCard != nil { showOrientation = true }
         }
         .task { viewModel.maxCards = homeViewModel.selectedSpread?.cardCount ?? 0; await viewModel.loadCards() }
     }
