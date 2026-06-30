@@ -1,4 +1,8 @@
+"""FastAPI Tarot AI backend."""
 from __future__ import annotations
+
+from dotenv import load_dotenv
+load_dotenv()
 
 import json
 from contextlib import asynccontextmanager
