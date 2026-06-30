@@ -3,14 +3,12 @@ options:
   bundleIdPrefix: com.klauschc
   deploymentTarget:
     iOS: "26.0"
-  xcodeVersion: "16.0"
 settings:
   base:
     CODE_SIGN_IDENTITY: ""
     CODE_SIGNING_REQUIRED: "NO"
     CODE_SIGNING_ALLOWED: "NO"
     TARGETED_DEVICE_FAMILY: "1"
-    DEVELOPMENT_TEAM: ""
     SWIFT_VERSION: "6.0"
 targets:
   TarotAI:
@@ -18,15 +16,11 @@ targets:
     platform: iOS
     sources:
       - path: .
-        type: group
-        excludes:
-          - "project.yml"
-          - "TarotAI.xcodeproj"
-          - "build"
-          - "TarotAI"
+        includes:
+          - "*.swift"
+          - "**/*.swift"
     settings:
       base:
         INFOPLIST_FILE: TarotAI/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.klauschc.void-deck
         PRODUCT_NAME: Void Deck
-        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: "NO"

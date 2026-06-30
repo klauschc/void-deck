@@ -11,16 +11,31 @@ jobs:
       - name: Install XcodeGen
         run: brew install xcodegen
       - name: Generate Xcode project
-        run: cd ios/TarotAI && xcodegen generate
+        run: |
+          cd ios/TarotAI
+          xcodegen generate
+          echo "=== Generated project structure ==="
+          find . -name "*.swift" | head -30
+          echo "=== Xcode project files ==="
+          ls -la TarotAI.xcodeproj/
       - name: Build archive
         run: |
           cd ios/TarotAI
-          xcodebuild archive -project TarotAI.xcodeproj -scheme TarotAI -archivePath ./build/TarotAI.xcarchive CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+          set -o pipefail
+          xcodebuild archive \
+            -project TarotAI.xcodeproj \
+            -scheme TarotAI \
+            -archivePath ./build/TarotAI.xcarchive \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            -destination "generic/platform=iOS" \
+            2>&1 | tail -100
       - name: Export unsigned IPA
         run: |
           cd ios/TarotAI
           mkdir -p ./build/Payload
-          cp -R ./build/TarotAI.xcarchive/Products/Applications/TarotAI.app ./build/Payload/
+          cp -R ./build/TarotAI.xcarchive/Products/Applications/*.app ./build/Payload/
           cd ./build && zip -r ../../TarotAI.ipa Payload
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
