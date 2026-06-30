@@ -3,6 +3,9 @@ import SwiftUI
 struct CardSelectionView: View {
     @Environment(HomeViewModel.self) private var homeViewModel
     @State private var viewModel = CardSelectionViewModel()
+    @State private var showOrientation = false
+    @State private var pendingCard: TarotCard? = nil
+    @State private var tempOrientation = "upright"
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 10), count: 3)
 
     var body: some View {
@@ -32,17 +35,18 @@ struct CardSelectionView: View {
                 bottomPanel
             }
         }
-        .sheet(isPresented: showOrientation) {
-            if let card = viewModel.cardToOrient {
-                CardOrientationPicker(card: card, onConfirm: { viewModel.setOrientation($0) }, onCancel: { viewModel.cancelOrientation() })
-                    .presentationDetents([.height(240)])
-            }
+        .sheet(isPresented: $showOrientation) {
+            CardOrientationPicker(orientation: $tempOrientation)
+                .presentationDetents([.height(240)])
+                .onDisappear {
+                    viewModel.setOrientation(tempOrientation)
+                    tempOrientation = "upright"
+                }
+        }
+        .onChange(of: viewModel.cardToOrient) { _, newCard in
+            if newCard != nil { showOrientation = true }
         }
         .task { viewModel.maxCards = homeViewModel.selectedSpread?.cardCount ?? 0; await viewModel.loadCards() }
-    }
-
-    var showOrientation: Binding<Bool> {
-        Binding(get: { viewModel.cardToOrient != nil }, set: { if !$0 { viewModel.cancelOrientation() } })
     }
 
     var cardGrid: some View {
@@ -52,9 +56,7 @@ struct CardSelectionView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(group.title).font(.headline).foregroundColor(TarotTheme.accent).padding(.horizontal, 20)
                         LazyVGrid(columns: columns, spacing: 10) {
-                            ForEach(group.cards) { card in
-                                cardTile(card)
-                            }
+                            ForEach(group.cards) { card in cardTile(card) }
                         }.padding(.horizontal, 20)
                     }
                 }
