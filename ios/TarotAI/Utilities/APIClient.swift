@@ -2,16 +2,20 @@ import Foundation
 
 actor APIClient {
     static let shared = APIClient()
-    private let baseURL: String
+    private var baseURL: String
     private let session: URLSession
     private let decoder = JSONDecoder()
     private let encoder: JSONEncoder = { let e = JSONEncoder(); e.keyEncodingStrategy = .convertToSnakeCase; return e }()
 
-    init(baseURL: String = "http://localhost:8000") {
-        self.baseURL = baseURL
+    init() {
+        self.baseURL = UserDefaults.standard.string(forKey: "api_base_url") ?? "http://localhost:8000"
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
         let config = URLSessionConfiguration.default; config.timeoutIntervalForRequest = 120
         self.session = URLSession(configuration: config)
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
+    }
+
+    func reconfigure() {
+        self.baseURL = UserDefaults.standard.string(forKey: "api_base_url") ?? "http://localhost:8000"
     }
 
     func fetchCards() async throws -> [TarotCard] { try decoder.decode([TarotCard].self, from: try await get("/api/cards")) }

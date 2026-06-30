@@ -25,6 +25,11 @@ struct ContentView: View {
                     .navigationDestination(for: Reading.self) { reading in ReadingResultView(reading: reading) }
             }
             .tabItem { Label("紀錄", systemImage: "clock") }.tag(1)
+
+            NavigationStack {
+                SettingsView()
+            }
+            .tabItem { Label("設定", systemImage: "gear") }.tag(2)
         }
         .tint(TarotTheme.primaryStart)
     }
