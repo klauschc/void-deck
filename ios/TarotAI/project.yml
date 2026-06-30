@@ -17,11 +17,16 @@ targets:
     type: application
     platform: iOS
     sources:
-      - path: TarotAI
+      - path: .
         type: group
+        excludes:
+          - "project.yml"
+          - "TarotAI.xcodeproj"
+          - "build"
+          - "TarotAI"
     settings:
       base:
         INFOPLIST_FILE: TarotAI/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.klauschc.void-deck
-        PRODUCT_NAME: TarotAI
+        PRODUCT_NAME: Void Deck
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: "NO"
