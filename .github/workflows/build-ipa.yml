@@ -1,0 +1,30 @@
+name: Build Unsigned IPA
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        run: cd ios/TarotAI && xcodegen generate
+      - name: Build archive
+        run: |
+          cd ios/TarotAI
+          xcodebuild archive -project TarotAI.xcodeproj -scheme TarotAI -archivePath ./build/TarotAI.xcarchive CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+      - name: Export unsigned IPA
+        run: |
+          cd ios/TarotAI
+          mkdir -p ./build/Payload
+          cp -R ./build/TarotAI.xcarchive/Products/Applications/TarotAI.app ./build/Payload/
+          cd ./build && zip -r ../../TarotAI.ipa Payload
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TarotAI.ipa
+          path: ios/TarotAI/TarotAI.ipa
+          retention-days: 7
