@@ -1,0 +1,7 @@
+.venv/
+tarot.db
+__pycache__/
+*.pyc
+phase1-spec.md
+phase1b-spec.md
+.DS_Store
